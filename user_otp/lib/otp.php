@@ -53,7 +53,7 @@ class OC_USER_OTP extends OC_User_Backend{
      * Constructor sets up {@link $firstvar}
      */
     public function __construct(){
-		    //OC_Log::write('OC_USER_OTP', __FUNCTION__.'().', OC_Log::DEBUG);
+		    //OCP\Util::writeLog('OC_USER_OTP', $name.'().', OCP\Util::DEBUG);
         $this->mOtp =  new MultiOtpDb(OCP\Config::getAppValue(
             'user_otp','EncryptionKey','DefaultCliEncryptionKey')
         );
@@ -269,12 +269,12 @@ class OC_USER_OTP extends OC_User_Backend{
         }
 
         if(!$this->mOtp->CheckUserExists($uid)){
-            OC_Log::write('OC_USER_OTP','No OTP for user '.$uid.' use user backend', OC_Log::DEBUG);
+            OCP\Util::writeLog('OC_USER_OTP', $name.'().', OCP\Util::DEBUG);
             return $userBackend->checkPassword($uid, $password);
         }else{
             $this->mOtp->SetUser($uid);
             $authMethode=OCP\Config::getAppValue('user_otp','authMethod',_AUTH_DEFAULT_);
-            OC_Log::write('OC_USER_OTP','used auth method : '.$authMethode, OC_Log::DEBUG);
+            OCP\Util::writeLog('OC_USER_OTP', $name.'().', OCP\Util::DEBUG);
             switch($authMethode){
                 case _AUTH_STANDARD_:
                     return $userBackend->checkPassword($uid, $password);
@@ -316,7 +316,7 @@ class OC_USER_OTP extends OC_User_Backend{
                   if(!isset($_POST['otpPassword']) || $_POST['otpPassword']===""){
                     return false;
                   }
-                  OC_Log::write('OC_USER_OTP','used OTP : '.$_POST['otpPassword'], OC_Log::DEBUG);
+                  OCP\Util::writeLog('OC_USER_OTP', $name.'().', OCP\Util::DEBUG);
                   $result = $this->mOtp->CheckToken($_POST['otpPassword']);
                     if ($result===0){
                       return $userBackend->checkPassword($uid, $password);
